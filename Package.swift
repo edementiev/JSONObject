@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "JSONObject",
     platforms: [
-        .macOS(.v13), .iOS(.v16), .watchOS(.v8), .tvOS(.v16)
+        .macOS(.v12), .iOS(.v15), .watchOS(.v7), .tvOS(.v15)
     ],
     products: [
         .library(

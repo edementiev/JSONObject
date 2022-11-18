@@ -17,13 +17,13 @@ public class JSONObject {
         return self.data
     }
 
-    init() { }
+    public init() { }
 
-    init(json: [String: Any]) {
+    public init(json: [String: Any]) {
         self.data = json
     }
 
-    init(data: Data?) {
+    public init(data: Data?) {
         if let data = data {
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 self.data = json

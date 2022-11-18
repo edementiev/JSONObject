@@ -13,7 +13,7 @@ public class JSONObject {
     private let errorLogging = false
     private var data = [String: Any]()
 
-    var rawData: [String: Any] {
+    public var rawData: [String: Any] {
         return self.data
     }
 
@@ -35,7 +35,7 @@ public class JSONObject {
         }
     }
 
-    func value<T>(key: String, defaultValue: T) -> T {
+    public func value<T>(key: String, defaultValue: T) -> T {
         if key.contains(".") {
             let keys = key.split(separator: ".")
             var currentData = self.data
@@ -58,18 +58,18 @@ public class JSONObject {
         }
     }
 
-    func object(key: String) -> JSONObject {
+    public func object(key: String) -> JSONObject {
         let value = self.value(key: key, defaultValue: [String: Any]())
         return JSONObject(json: value)
     }
 
-    func exists(key: String) -> Bool {
+    public func exists(key: String) -> Bool {
         let value = self.data[key]
         guard !(value is NSNull) else { return false }
         return (value != nil)
     }
 
-    func isEmpty() -> Bool {
+    public func isEmpty() -> Bool {
         return (self.data.count == 0)
     }
 

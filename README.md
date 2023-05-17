@@ -1,10 +1,10 @@
 # JSONObject
 
 1.0.0
-Первая версия
+- Первая версия
 
 1.0.1
-Поддержка iSO/tvOS 15, MacOS 12
+- Поддержка iSO/tvOS 15, MacOS 12
 
 1.1.0
 - Флаг errorLogging стал public

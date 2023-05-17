@@ -10,23 +10,33 @@ import Foundation
 
 public class JSONObject {
 
-    private let errorLogging = false
     private var data = [String: Any]()
+    private var ready = false
+
+    public let errorLogging = false
 
     public var rawData: [String: Any] {
         return self.data
     }
+    
+    public var isInitialized: Bool {
+        return self.ready
+    }
 
-    public init() { }
+    public init() {
+        self.ready = true
+    }
 
     public init(json: [String: Any]) {
         self.data = json
+        self.ready = true
     }
 
     public init(data: Data?) {
         if let data = data {
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 self.data = json
+                self.ready = true
             } else {
                 print("JSONObject: Не могу декодировать JSON\n\(String(decoding: data, as: UTF8.self))")
             }

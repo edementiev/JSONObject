@@ -97,7 +97,14 @@ public class JSONObject {
             guard let value = intValue as? T else { return defaultValue }
             return value
         } else if defaultValue is String {
-            return "\(data[key])"
+            if let strValue = data[key] as? String {
+                guard let value = strValue as? T else { return defaultValue }
+                return value
+            }
+            guard let intValue = data[key] as? Int else { return defaultValue }
+            let strValue = "\(intValue)"
+            guard let value = strValue as? T else { return defaultValue }
+            return value
         } else {
             if let value = data[key] as? T { return value } else { return defaultValue }
         }

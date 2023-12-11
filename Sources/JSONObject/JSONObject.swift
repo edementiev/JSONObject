@@ -10,13 +10,13 @@ import Foundation
 
 public class JSONObject {
 
-    private var data = [String: Any]()
+    private var dict = [String: Any]()
     private var ready = false
 
     public let errorLogging = false
 
     public var rawData: [String: Any] {
-        return self.data
+        return self.dict
     }
     
     public var isInitialized: Bool {
@@ -27,15 +27,15 @@ public class JSONObject {
         self.ready = true
     }
 
-    public init(json: [String: Any]) {
-        self.data = json
+    public init(dict: [String: Any]) {
+        self.dict = dict
         self.ready = true
     }
 
     public init(data: Data?) {
         if let data = data {
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                self.data = json
+                self.dict = json
                 self.ready = true
             } else {
                 print("JSONObject: Не могу декодировать JSON\n\(String(decoding: data, as: UTF8.self))")
@@ -48,65 +48,65 @@ public class JSONObject {
     public func value<T>(key: String, defaultValue: T) -> T {
         if key.contains(".") {
             let keys = key.split(separator: ".")
-            var currentData = self.data
+            var currentDict = self.dict
             for index in (0...keys.count - 1) {
                 let currentKey = String(keys[index])
                 if index < (keys.count - 1) {
-                    if let value = currentData[currentKey] as? [String: Any] {
-                        currentData = value
+                    if let value = currentDict[currentKey] as? [String: Any] {
+                        currentDict = value
                     } else {
                         if self.errorLogging { print("key not found: \(key)") }
                         return defaultValue
                     }
                 } else {
-                    return self.justValue(data: currentData, key: String(currentKey), defaultValue: defaultValue)
+                    return self.justValue(dict: currentDict, key: String(currentKey), defaultValue: defaultValue)
                 }
             }
             return defaultValue
         } else {
-            return self.justValue(data: self.data, key: key, defaultValue: defaultValue)
+            return self.justValue(dict: self.dict, key: key, defaultValue: defaultValue)
         }
     }
 
     public func object(key: String) -> JSONObject {
         let value = self.value(key: key, defaultValue: [String: Any]())
-        return JSONObject(json: value)
+        return JSONObject(dict: value)
     }
 
     public func exists(key: String) -> Bool {
-        let value = self.data[key]
+        let value = self.dict[key]
         guard !(value is NSNull) else { return false }
         return (value != nil)
     }
 
     public func isEmpty() -> Bool {
-        return (self.data.count == 0)
+        return (self.dict.count == 0)
     }
 
     //
     // MARK: Private
     //
-    private func justValue<T>(data: [String: Any], key: String, defaultValue: T) -> T {
+    private func justValue<T>(dict: [String: Any], key: String, defaultValue: T) -> T {
         if defaultValue is Int {
-            if let intValue = data[key] as? Int {
+            if let intValue = dict[key] as? Int {
                 guard let value = intValue as? T else { return defaultValue }
                 return value
             }
-            guard let stringValue = data[key] as? String else { return defaultValue }
+            guard let stringValue = dict[key] as? String else { return defaultValue }
             guard let intValue = Int(stringValue) else { return defaultValue }
             guard let value = intValue as? T else { return defaultValue }
             return value
         } else if defaultValue is String {
-            if let strValue = data[key] as? String {
+            if let strValue = dict[key] as? String {
                 guard let value = strValue as? T else { return defaultValue }
                 return value
             }
-            guard let intValue = data[key] as? Int else { return defaultValue }
+            guard let intValue = dict[key] as? Int else { return defaultValue }
             let strValue = "\(intValue)"
             guard let value = strValue as? T else { return defaultValue }
             return value
         } else {
-            if let value = data[key] as? T { return value } else { return defaultValue }
+            if let value = dict[key] as? T { return value } else { return defaultValue }
         }
     }
 

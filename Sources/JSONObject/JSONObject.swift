@@ -92,9 +92,36 @@ public class JSONObject {
                 guard let value = intValue as? T else { return defaultValue }
                 return value
             }
+            if let doubleValue = dict[key] as? Double {
+                guard let value = Int(doubleValue) as? T else { return defaultValue }
+                return value
+            }
+            
             guard let stringValue = dict[key] as? String else { return defaultValue }
-            guard let intValue = Int(stringValue) else { return defaultValue }
-            guard let value = intValue as? T else { return defaultValue }
+            
+            if let intValue = Int(stringValue) {
+                guard let value = intValue as? T else { return defaultValue }
+                return value
+            }
+
+            if let doubleValue = Double(stringValue) {
+                guard let value = Int(doubleValue) as? T else { return defaultValue }
+                return value
+            }
+
+            return defaultValue
+        } else if defaultValue is Double {
+            if let doubleValue = dict[key] as? Double {
+                guard let value = doubleValue as? T else { return defaultValue }
+                return value
+            }
+            if let intValue = dict[key] as? Int {
+                guard let value = Double(intValue) as? T else { return defaultValue }
+                return value
+            }
+            guard let stringValue = dict[key] as? String else { return defaultValue }
+            guard let doubleValue = Double(stringValue) else { return defaultValue }
+            guard let value = doubleValue as? T else { return defaultValue }
             return value
         } else if defaultValue is String {
             if let strValue = dict[key] as? String {

@@ -83,7 +83,7 @@ public class JSONObject {
         return JSONObject(dict: value)
     }
     
-    public func arrayObjects(key: String) -> [JSONObject] {
+    public func array(key: String) -> [JSONObject] {
         let array = self.value(key: key, defaultValue: [[String: Any]]())
         var objects = [JSONObject]()
         for item in array {

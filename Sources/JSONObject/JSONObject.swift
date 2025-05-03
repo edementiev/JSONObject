@@ -68,11 +68,6 @@ public class JSONObject {
         }
     }
 
-    public func object(key: String) -> JSONObject {
-        let value = self.value(key: key, defaultValue: [String: Any]())
-        return JSONObject(dict: value)
-    }
-
     public func exists(key: String) -> Bool {
         let value = self.dict[key]
         guard !(value is NSNull) else { return false }
@@ -81,6 +76,20 @@ public class JSONObject {
 
     public func isEmpty() -> Bool {
         return (self.dict.count == 0)
+    }
+
+    public func object(key: String) -> JSONObject {
+        let value = self.value(key: key, defaultValue: [String: Any]())
+        return JSONObject(dict: value)
+    }
+    
+    public func arrayObjects(key: String) -> [JSONObject] {
+        let array = self.value(key: key, defaultValue: [[String: Any]]())
+        var objects = [JSONObject]()
+        for item in array {
+            objects.append(JSONObject(dict: item))
+        }
+        return objects
     }
 
     //

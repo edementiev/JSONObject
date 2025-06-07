@@ -25,3 +25,6 @@
 
 2.1
 - Добавлен метод arrayObjects(key: String) -> [JSONObject]
+
+2.2
+- Теперь Sendable

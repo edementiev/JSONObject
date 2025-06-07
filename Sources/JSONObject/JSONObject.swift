@@ -8,20 +8,17 @@
 
 import Foundation
 
-final public class JSONObject: Sendable {
+public class JSONObject {
 
-    
-    @MainActor private var dict = [String: Any]()
-    @MainActor private var ready = false
+    private var dict = [String: Any]()
+    private var ready = false
 
     public let errorLogging = false
 
-    @MainActor
     public var rawData: [String: Any] {
         return self.dict
     }
-
-    @MainActor
+    
     public var isInitialized: Bool {
         return self.ready
     }
@@ -30,13 +27,11 @@ final public class JSONObject: Sendable {
         self.ready = true
     }
 
-    @MainActor
     public init(dict: [String: Any]) {
         self.dict = dict
         self.ready = true
     }
 
-    @MainActor
     public init(data: Data?) {
         if let data = data {
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
@@ -50,7 +45,6 @@ final public class JSONObject: Sendable {
         }
     }
 
-    @MainActor
     public func value<T>(key: String, defaultValue: T) -> T {
         if key.contains(".") {
             let keys = key.split(separator: ".")
@@ -74,25 +68,21 @@ final public class JSONObject: Sendable {
         }
     }
 
-    @MainActor
     public func exists(key: String) -> Bool {
         let value = self.dict[key]
         guard !(value is NSNull) else { return false }
         return (value != nil)
     }
 
-    @MainActor
     public func isEmpty() -> Bool {
         return (self.dict.count == 0)
     }
 
-    @MainActor
     public func object(key: String) -> JSONObject {
         let value = self.value(key: key, defaultValue: [String: Any]())
         return JSONObject(dict: value)
     }
     
-    @MainActor
     public func array(key: String) -> [JSONObject] {
         let array = self.value(key: key, defaultValue: [[String: Any]]())
         var objects = [JSONObject]()

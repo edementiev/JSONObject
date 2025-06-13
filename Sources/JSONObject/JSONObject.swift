@@ -8,13 +8,15 @@
 
 import Foundation
 
-public struct JSONObject: @unchecked Sendable {
-    private var dict = [String: Any]()
+public typealias JSONRAW = [String: any Sendable]
+
+public struct JSONObject: Sendable {
+    private var dict = JSONRAW()
     private var ready = false
 
     public let errorLogging = false
 
-    public var rawData: [String: Any] {
+    public var rawData: JSONRAW {
         return self.dict
     }
     
@@ -26,14 +28,14 @@ public struct JSONObject: @unchecked Sendable {
         self.ready = true
     }
 
-    public init(dict: [String: Any]) {
+    public init(dict: JSONRAW) {
         self.dict = dict
         self.ready = true
     }
 
     public init(data: Data?) {
         if let data = data {
-            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? JSONRAW {
                 self.dict = json
                 self.ready = true
             } else {
@@ -51,7 +53,7 @@ public struct JSONObject: @unchecked Sendable {
             for index in (0...keys.count - 1) {
                 let currentKey = String(keys[index])
                 if index < (keys.count - 1) {
-                    if let value = currentDict[currentKey] as? [String: Any] {
+                    if let value = currentDict[currentKey] as? JSONRAW {
                         currentDict = value
                     } else {
                         if self.errorLogging { print("key not found: \(key)") }
@@ -78,12 +80,12 @@ public struct JSONObject: @unchecked Sendable {
     }
 
     public func object(key: String) -> JSONObject {
-        let value = self.value(key: key, defaultValue: [String: Any]())
+        let value = self.value(key: key, defaultValue: [String: any Sendable]())
         return JSONObject(dict: value)
     }
     
     public func array(key: String) -> [JSONObject] {
-        let array = self.value(key: key, defaultValue: [[String: Any]]())
+        let array = self.value(key: key, defaultValue: [JSONRAW]())
         var objects = [JSONObject]()
         for item in array {
             objects.append(JSONObject(dict: item))
@@ -94,7 +96,8 @@ public struct JSONObject: @unchecked Sendable {
     //
     // MARK: Private
     //
-    private func justValue<T>(dict: [String: Any], key: String, defaultValue: T) -> T {
+    private func justValue<T>(dict: JSONRAW, key: String, defaultValue: T) -> T {
+        // Int
         if defaultValue is Int {
             if let intValue = dict[key] as? Int {
                 guard let value = intValue as? T else { return defaultValue }
@@ -118,6 +121,7 @@ public struct JSONObject: @unchecked Sendable {
             }
 
             return defaultValue
+        // Double
         } else if defaultValue is Double {
             if let doubleValue = dict[key] as? Double {
                 guard let value = doubleValue as? T else { return defaultValue }
@@ -131,6 +135,7 @@ public struct JSONObject: @unchecked Sendable {
             guard let doubleValue = Double(stringValue) else { return defaultValue }
             guard let value = doubleValue as? T else { return defaultValue }
             return value
+        // String
         } else if defaultValue is String {
             if let strValue = dict[key] as? String {
                 guard let value = strValue as? T else { return defaultValue }
@@ -140,6 +145,7 @@ public struct JSONObject: @unchecked Sendable {
             let strValue = "\(intValue)"
             guard let value = strValue as? T else { return defaultValue }
             return value
+        // Other
         } else {
             if let value = dict[key] as? T { return value } else { return defaultValue }
         }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-final public actor JSONObject: Sendable {
+public struct JSONObject {
 
     private var dict = [String: Any]()
     private var ready = false

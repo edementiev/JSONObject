@@ -23,5 +23,5 @@ let package = Package(
             name: "JSONObjectTests",
             dependencies: ["JSONObject"]),
     ],
-    swiftLanguageVersions: [.v5]
+    swiftLanguageVersions: [.v5, .version("6")]
 )

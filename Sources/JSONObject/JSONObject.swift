@@ -8,8 +8,7 @@
 
 import Foundation
 
-public struct JSONObject {
-
+public struct JSONObject: @unchecked Sendable {
     private var dict = [String: Any]()
     private var ready = false
 

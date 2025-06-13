@@ -26,5 +26,5 @@
 2.1
 - Добавлен метод arrayObjects(key: String) -> [JSONObject]
 
-2.2.4
-- Sendable
+2.3
+- Using Sendable struct instead of class

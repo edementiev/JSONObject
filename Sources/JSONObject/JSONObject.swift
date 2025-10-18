@@ -2,10 +2,9 @@
 //  JSONObject.swift
 //  gorbilet
 //
-//  Created by Евгений Дементьев on 23/05/2019.
+//  Created by Евгений Дементьев on 06.12.2023.
 //  Copyright © 2019 Gorbilet. All rights reserved.
 //
-
 import Foundation
 
 public typealias JSONRAW = [String: any Sendable]

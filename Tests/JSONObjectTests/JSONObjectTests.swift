@@ -1,33 +1,31 @@
-import XCTest
+import Testing
 @testable import JSONObject
 
-final class JSONObjectTests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        
-        // String
-        XCTAssertEqual(JSONObject(dict: ["name": "value"]).value(key: "name", defaultValue: ""), "value")
-        
-        // Int
-        XCTAssertEqual(JSONObject(dict: ["name": 10]).value(key: "name", defaultValue: 0), 10)
-        XCTAssertEqual(JSONObject(dict: ["name": "10"]).value(key: "name", defaultValue: 0), 10)
-        
-        // Double
-        XCTAssertEqual(JSONObject(dict: ["name": 10.10]).value(key: "name", defaultValue: 0.0), 10.10)
-        XCTAssertEqual(JSONObject(dict: ["name": "10.10"]).value(key: "name", defaultValue: 0.0), 10.10)
+@Test func String() async throws {
+    #expect(JSONObject(dict: ["name": "value"]).value(key: "name", defaultValue: "") == "value")
+}
 
-        // Int -> Double
-        XCTAssertEqual(JSONObject(dict: ["name": 10]).value(key: "name", defaultValue: 0.0), 10.0)
-        XCTAssertEqual(JSONObject(dict: ["name": "10"]).value(key: "name", defaultValue: 0.0), 10.0)
+@Test func Int() async throws {
+    #expect(JSONObject(dict: ["name": 10]).value(key: "name", defaultValue: 0) == 10)
+    #expect(JSONObject(dict: ["name": "10"]).value(key: "name", defaultValue: 0) == 10)
+}
 
-        // Double -> Int (Exact)
-        XCTAssertEqual(JSONObject(dict: ["name": 10.0]).value(key: "name", defaultValue: 0), 10)
-        XCTAssertEqual(JSONObject(dict: ["name": "10.0"]).value(key: "name", defaultValue: 0), 10)
+@Test func Double() async throws {
+    #expect(JSONObject(dict: ["name": 10.10]).value(key: "name", defaultValue: 0.0) == 10.10)
+    #expect(JSONObject(dict: ["name": "10.10"]).value(key: "name", defaultValue: 0.0) == 10.10)
+}
 
-        // Double -> Int (Trunc)
-        XCTAssertEqual(JSONObject(dict: ["name": 10.99]).value(key: "name", defaultValue: 0), 10)
-        XCTAssertEqual(JSONObject(dict: ["name": "10.99"]).value(key: "name", defaultValue: 0), 10)
-    }
+@Test func Int2Double() async throws {
+    #expect(JSONObject(dict: ["name": 10]).value(key: "name", defaultValue: 0.0) == 10.0)
+    #expect(JSONObject(dict: ["name": "10"]).value(key: "name", defaultValue: 0.0) == 10.0)
+}
+
+@Test func Double2IntExact() async throws {
+    #expect(JSONObject(dict: ["name": 10.0]).value(key: "name", defaultValue: 0) == 10)
+    #expect(JSONObject(dict: ["name": "10.0"]).value(key: "name", defaultValue: 0) == 10)
+}
+
+@Test func Double2IntTrunc() async throws {
+    #expect(JSONObject(dict: ["name": 10.99]).value(key: "name", defaultValue: 0) == 10)
+    #expect(JSONObject(dict: ["name": "10.99"]).value(key: "name", defaultValue: 0) == 10)
 }

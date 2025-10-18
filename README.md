@@ -28,3 +28,6 @@
 
 2.3
 - Using Sendable struct instead of class
+
+2.4
+- Update tests

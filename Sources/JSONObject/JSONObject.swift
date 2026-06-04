@@ -83,8 +83,8 @@ public struct JSONObject: Sendable {
         return JSONObject(dict: value)
     }
     
-    public func array(key: String) -> [JSONObject] {
-        let array = self.value(key: key, defaultValue: [JSONRAW]())
+    public func array(key: String, separator: String.Element = ".") -> [JSONObject] {
+        let array = self.value(key: key, defaultValue: [JSONRAW](), separator: separator)
         var objects = [JSONObject]()
         for item in array {
             objects.append(JSONObject(dict: item))

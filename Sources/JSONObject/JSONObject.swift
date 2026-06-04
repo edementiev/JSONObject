@@ -45,8 +45,8 @@ public struct JSONObject: Sendable {
         }
     }
 
-    public func value<T>(key: String, defaultValue: T) -> T {
-        if key.contains(".") {
+    public func value<T>(key: String, defaultValue: T, rawName: Bool = false) -> T {
+        if key.contains(".") && !rawName {
             let keys = key.split(separator: ".")
             var currentDict = self.dict
             for index in (0...keys.count - 1) {

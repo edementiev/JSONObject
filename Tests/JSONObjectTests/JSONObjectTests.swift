@@ -29,3 +29,13 @@ import Testing
     #expect(JSONObject(dict: ["name": 10.99]).value(key: "name", defaultValue: 0) == 10)
     #expect(JSONObject(dict: ["name": "10.99"]).value(key: "name", defaultValue: 0) == 10)
 }
+
+@Test func RawNameTest() async throws {
+    let json1 = JSONObject(dict: ["first": ["second": 1]])
+    #expect(json1.value(key: "first.second", defaultValue: 0) == 1)
+    #expect(json1.value(key: "first.second", defaultValue: 0, rawName: true) == 0)
+    
+    let json2 = JSONObject(dict: ["first.second": 1])
+    #expect(json2.value(key: "first.second", defaultValue: 0) == 0)
+    #expect(json2.value(key: "first.second", defaultValue: 0, rawName: true) == 1)
+}

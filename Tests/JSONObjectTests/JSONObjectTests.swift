@@ -34,8 +34,13 @@ import Testing
     let json1 = JSONObject(dict: ["first": ["second": 1]])
     #expect(json1.value(key: "first.second", defaultValue: 0) == 1)
     #expect(json1.value(key: "first.second", defaultValue: 0, rawName: true) == 0)
-    
+
     let json2 = JSONObject(dict: ["first.second": 1])
     #expect(json2.value(key: "first.second", defaultValue: 0) == 0)
     #expect(json2.value(key: "first.second", defaultValue: 0, rawName: true) == 1)
+    
+    let json3 = JSONObject(dict: ["first": ["second": ["three": 1]]])
+    #expect(json3.object(key: "first.second").value(key: "three", defaultValue: 0) == 1)
+    #expect(json3.object(key: "first.second", rawName: true).value(key: "three", defaultValue: 0) == 0)
+
 }

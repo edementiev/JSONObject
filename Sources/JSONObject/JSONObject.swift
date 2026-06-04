@@ -78,8 +78,8 @@ public struct JSONObject: Sendable {
         return (self.dict.count == 0)
     }
 
-    public func object(key: String) -> JSONObject {
-        let value = self.value(key: key, defaultValue: [String: any Sendable]())
+    public func object(key: String, rawName: Bool = false) -> JSONObject {
+        let value = self.value(key: key, defaultValue: [String: any Sendable](), rawName: rawName)
         return JSONObject(dict: value)
     }
     
